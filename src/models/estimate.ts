@@ -16,22 +16,21 @@ export function estimateTokens(messages: Message[]): number {
       }
     }
   }
-  total += 2;
+  total += 1;
   return total;
 }
 
-/** Per-string heuristic; tuned constant 3.8 chars/token for English+code. */
+/** Per-string heuristic; tuned constant ~5 chars/token for English+code (cl100k_base-ish). */
 export function estimateString(s: string): number {
   if (!s) return 0;
   let tokens = 0;
   const wordMatches = s.match(/[A-Za-z0-9']+/g) ?? [];
   for (const w of wordMatches) {
-    tokens += Math.max(1, Math.ceil(w.length / 3.8));
+    tokens += Math.max(1, Math.ceil(w.length / 5));
   }
   const nonWord = s.replace(/[A-Za-z0-9']+/g, "");
-  const wsRuns = nonWord.match(/\s+/g)?.length ?? 0;
   const puncts = nonWord.replace(/\s+/g, "").length;
-  tokens += wsRuns + puncts;
+  tokens += puncts;
   return tokens;
 }
 

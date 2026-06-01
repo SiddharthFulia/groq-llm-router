@@ -23,7 +23,14 @@ const server = setupServer();
 
 beforeAll(() => {
   process.env.GROQ_API_KEY = "test-key";
-  server.listen({ onUnhandledRequest: "error" });
+  server.listen({
+    onUnhandledRequest(req, print) {
+      // supertest spins up an ephemeral localhost server — let those through.
+      const host = new URL(req.url).hostname;
+      if (host === "127.0.0.1" || host === "localhost" || host === "::1") return;
+      print.error();
+    },
+  });
 });
 afterEach(() => {
   server.resetHandlers();

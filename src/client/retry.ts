@@ -6,7 +6,7 @@ export interface RetryOptions {
   sleep?: (ms: number) => Promise<void>;
 }
 
-/** Full-jitter exponential backoff. `attempt` is 1-based. */
+/** Full-jitter exponential backoff. `attempt` is 1-based. Result is in [0, exp). */
 export function backoffDelay(
   attempt: number,
   baseMs = 250,
@@ -14,7 +14,7 @@ export function backoffDelay(
   random: () => number = Math.random,
 ): number {
   const exp = Math.min(capMs, baseMs * 2 ** (attempt - 1));
-  return Math.floor(random() * exp);
+  return Math.min(Math.floor(random() * exp), Math.max(0, exp - 1));
 }
 
 const defaultSleep = (ms: number): Promise<void> =>
