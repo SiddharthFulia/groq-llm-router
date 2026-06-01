@@ -1,0 +1,77 @@
+{
+  "name": "groq-llm-router",
+  "version": "0.1.0",
+  "description": "A tiny TypeScript router that picks the right Groq model for each workload — fast, balanced, or tool-heavy — with automatic 429/503 fallback, retry, streaming, and a token-budget estimator.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "groq-route": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./express": {
+      "types": "./dist/middleware/express.d.ts",
+      "import": "./dist/middleware/express.js"
+    },
+    "./hono": {
+      "types": "./dist/middleware/hono.d.ts",
+      "import": "./dist/middleware/hono.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "dev": "tsc -p tsconfig.lib.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "cli": "node --loader tsx src/cli.ts",
+    "example:basic": "tsx examples/basic-chat.ts",
+    "example:stream": "tsx examples/streaming.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "groq",
+    "llm",
+    "router",
+    "ai",
+    "openai",
+    "fallback",
+    "streaming",
+    "express",
+    "hono",
+    "typescript"
+  ],
+  "author": "Siddharth Fulia <eng@getpassionfruit.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.11.0",
+    "@types/supertest": "^6.0.2",
+    "express": "^5.0.0",
+    "msw": "^2.6.0",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "peerDependencies": {
+    "express": "^4 || ^5",
+    "hono": "^4"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "hono": { "optional": true }
+  }
+}
